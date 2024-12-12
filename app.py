@@ -39,13 +39,16 @@ if not check_password():
 # Streamlit app layout
 
 # Set the page to wide or centered mode
-st.set_page_config(layout="wide")
+st.set_page_config(layout="wide", 
+                   page_title="Modular Chatbot",
+                   page_icon=":lightbulb:",
+                   initial_sidebar_state="collapsed"
+                   )
 
 # Streamlit app layout
-st.title(config.app_title)
-st.caption(config.app_author)
-with st.expander("INSTRUCTIONS FOR STUDENTS:"):
-    st.markdown(config.instructions)
+# st.title(config.app_title)
+# with st.expander("INSTRUCTIONS FOR STUDENTS:"):
+#     st.markdown(config.instructions)
 
 ############################################################################################################
 
@@ -83,7 +86,7 @@ def reset_chat_history():
     st.rerun()
 
 # Main chat container
-with st.container(height=400, border=True):
+with st.container(border=False):
     # Display chat history in reverse order including new messages
     for message in st.session_state["display_messages"][1:]:
         if message["role"] == "user":
@@ -130,20 +133,16 @@ with st.container(height=400, border=True):
             except Exception as e:
                 st.error(f"An error occurred: {str(e)}")
 
-# Add Clear Chat History button between container and warning message
-if st.button("Clear Chat History"):
-    reset_chat_history()
-
-st.markdown(config.warning_message, unsafe_allow_html=True)
-
-############################################################################################################
-
-# Footer
+# Create a sidebar
 with st.sidebar:
-    st.markdown("---")
+    st.markdown(config.warning_message, unsafe_allow_html=True)
 
-    st.title("About")
-
-   # Using the config objects in your Streamlit app
-    st.markdown(config.app_creation_message, unsafe_allow_html=True)
-    # st.markdown(config.app_repo_license_message, unsafe_allow_html=True)
+    # Add Clear Chat History button to sidebar
+    if st.button("Clear Chat History"):
+        reset_chat_history()
+    
+    # Add license link with markdown
+    st.markdown("---")  # Separator line
+    st.markdown("""
+        <small>Licensed under [GNU GPL v3.0](https://www.gnu.org/licenses/gpl-3.0.en.html)</small>
+        """, unsafe_allow_html=True)
